@@ -53,6 +53,70 @@ internal class SimpleDownloader : IDownloader
                     await File.WriteAllBytesAsync(dResult.ActualFilePath, decrypted);
                     break;
                 }
+                case EncryptMethod.MYSQLCRYPT_CSV:
+                {
+                     var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                     var videoBytes = MySqlCrypt.DecodeCsv(text);
+                     await File.WriteAllBytesAsync(dResult.ActualFilePath, videoBytes);
+                     break;
+                }
+                case EncryptMethod.MYSQLCRYPT_BMP:
+                {
+                    var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                    var videoBytes = MySqlCrypt.DecodeBmp(text);
+                    await File.WriteAllBytesAsync(dResult.ActualFilePath, videoBytes);
+                    break;
+                }
+                case EncryptMethod.AKAMAI_TSA:
+                {
+                                        var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                                        var b64Text = AkamaiPlayerIn.DecodeTsa(text);
+                                        var decodedText = Convert.FromBase64String(b64Text);
+                                        var key = segment.EncryptInfo.Key;
+                                        var iv = segment.EncryptInfo.IV;
+                                        AkamaiPlayerIn.DecryptSegment(decodedText, key!, iv!, dResult.ActualFilePath, DownloaderConfig.MyOptions.ThreadCount);
+                                        break;
+                }
+                case EncryptMethod.AKAMAI_TSB:
+                {
+                        var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                        var b64Text = AkamaiPlayerIn.DecodeTsb(text);
+                        var decodedText = Convert.FromBase64String(b64Text);
+                        var key = segment.EncryptInfo.Key;
+                        var iv = segment.EncryptInfo.IV;
+                        AkamaiPlayerIn.DecryptSegment(decodedText, key!, iv!, dResult.ActualFilePath, DownloaderConfig.MyOptions.ThreadCount);
+                        break;
+                }
+                case EncryptMethod.AKAMAI_TSC:
+                {
+                        var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                        var b64Text = AkamaiPlayerIn.DecodeTsc(text);
+                        var decodedText = Convert.FromBase64String(b64Text);
+                        var key = segment.EncryptInfo.Key;
+                        var iv = segment.EncryptInfo.IV;
+                        AkamaiPlayerIn.DecryptSegment(decodedText, key!, iv!, dResult.ActualFilePath, DownloaderConfig.MyOptions.ThreadCount);
+                        break;
+                }
+                case EncryptMethod.AKAMAI_TSD:
+                {
+                        var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                        var b64Text = AkamaiPlayerIn.DecodeTsd(text);
+                        var decodedText = Convert.FromBase64String(b64Text);
+                        var key = segment.EncryptInfo.Key;
+                        var iv = segment.EncryptInfo.IV;
+                        AkamaiPlayerIn.DecryptSegment(decodedText, key!, iv!, dResult.ActualFilePath, DownloaderConfig.MyOptions.ThreadCount);
+                        break;
+                }
+                case EncryptMethod.AKAMAI_TSE:
+                {
+                        var text = await File.ReadAllTextAsync(dResult.ActualFilePath);
+                        var b64Text = AkamaiPlayerIn.DecodeTse(text);
+                        var decodedText = Convert.FromBase64String(b64Text);
+                        var key = segment.EncryptInfo.Key;
+                        var iv = segment.EncryptInfo.IV;
+                        AkamaiPlayerIn.DecryptSegment(decodedText, key!, iv!, dResult.ActualFilePath, DownloaderConfig.MyOptions.ThreadCount);
+                        break;
+                }
                 case EncryptMethod.SAMPLE_AES_CTR:
                     // throw new NotSupportedException("SAMPLE-AES-CTR");
                     break;
